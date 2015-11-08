@@ -38,13 +38,23 @@ public class ParameterNameExtractor {
 
     /**
      * Extracts names of a serializable lambda parameters
-     * @param keyValue
+     * @param lambda Serializable lambda
      * @return
      */
-    public static List<String> extractParameterNames(Serializable keyValue) {
-        Method method = lambdaMethod(keyValue);
+    public static List<String> extractParameterNames(Serializable lambda) {
+        Method method = lambdaMethod(lambda);
         return Collections.unmodifiableList(Arrays.stream(method.getParameters()).map(ParameterNameExtractor::getParamName).collect(toList()));
     }
+
+    /**
+       * Extracts names of a serializable lambda parameters
+       * @param lambda Serializable lambda
+       * @return
+       */
+      public static String extractFirstParameterName(Serializable lambda) {
+          Method method = lambdaMethod(lambda);
+          return getParamName(method.getParameters()[0]);
+      }
 
     private static String getParamName(Parameter parameter) {
         if (!parameter.isNamePresent()) {
@@ -59,7 +69,7 @@ public class ParameterNameExtractor {
             replaceMethod.setAccessible(true);
             return (SerializedLambda) replaceMethod.invoke(keyValue);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
