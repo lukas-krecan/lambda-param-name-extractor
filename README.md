@@ -6,11 +6,13 @@ Extracts parameter name from lambda. Inspired by Benji Weber's [code](https://gi
     import net.javacrumbs.lambdaextractor.ParameterNameExtractor
 
     ...
-    SerializableFunction lambda = name -> "a"; // lambda type has to be serializable
+    // lambda type has to be serializable
+    SerializableFunction lambda = name -> "a";
     ParameterNameExtractor.extractParameterNames(lambda); // returns "name"
 
     ...
-    SerializableBiFunction lambda = (name1, name2) -> "a"; // lambda type has to be serializable
+    // lambda type has to be serializable
+    SerializableBiFunction lambda = (name1, name2) -> "a";
     ParameterNameExtractor.extractParameterNames(lambda); // returns name1, name2
     ParameterNameExtractor.extractFirstParameterName(lambda); // return name1
 
