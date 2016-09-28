@@ -35,6 +35,17 @@ public class MapExampleTest {
         assertThat(map).containsExactly(entry("key1", "value1"), entry("key2", "value2"));
     }
 
+    @Test
+    public void testCreateMapExtenalValue() {
+        String value2 = "value2";
+
+        Map<String, String> map = map(
+            key1 -> "value1",
+            key2 -> value2
+        );
+        assertThat(map).containsExactly(entry("key1", "value1"), entry("key2", "value2"));
+    }
+
     @SafeVarargs
     public static <T> Map<String, T> map(Entry<T>... entries) {
         Map<String, T> result = new HashMap<>();
@@ -46,6 +57,7 @@ public class MapExampleTest {
         return result;
     }
 
+    @FunctionalInterface
     public static interface Entry<T> extends Serializable {
         public T apply(String name);
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2009-2015 the original author or authors.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,16 @@ import static net.javacrumbs.lambdaextractor.examples.OldfashionedMapTest.Entry.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OldfashionedMapTest {
+
+    @Test
+    public void testCreateUgly() {
+        Map<String, String> map = new HashMap<String, String>() {{
+            put("key1", "value1");
+            put("key2", "value2");
+        }};
+        assertThat(map).containsExactly(MapEntry.entry("key1", "value1"), MapEntry.entry("key2", "value2"));
+    }
+
     @Test
     public void testCreateOldFashioned() {
         Map<String, String> map = map(
@@ -37,7 +47,7 @@ public class OldfashionedMapTest {
     @SafeVarargs
     public static <S, T> Map<S, T> map(Entry<S, T>... entries) {
         Map<S, T> result = new HashMap<>();
-        for (Entry<S, T> entry: entries) {
+        for (Entry<S, T> entry : entries) {
             result.put(entry.key, entry.value);
         }
         return result;

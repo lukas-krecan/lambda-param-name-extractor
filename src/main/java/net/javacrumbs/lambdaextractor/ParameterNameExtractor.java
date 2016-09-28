@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -39,7 +38,6 @@ public class ParameterNameExtractor {
     /**
      * Extracts names of a serializable lambda parameters
      * @param lambda Serializable lambda
-     * @return
      */
     public static List<String> extractParameterNames(Serializable lambda) {
         Method method = lambdaMethod(lambda);
@@ -49,7 +47,6 @@ public class ParameterNameExtractor {
     /**
        * Extracts names of a serializable lambda parameters
        * @param lambda Serializable lambda
-       * @return
        */
       public static String extractFirstParameterName(Serializable lambda) {
           Method method = lambdaMethod(lambda);
@@ -82,12 +79,23 @@ public class ParameterNameExtractor {
         }
     }
 
+    /**
+     * <ol>
+     *     <li>Serializes lambda to SerializedLambda</li>
+     *     <li>Finds containing class - class where the lambda method is implemented</li>
+     *     <li>Finds the method in the containing class</li>
+     * </ol>
+     */
     private static Method lambdaMethod(Serializable keyValue) {
         SerializedLambda lambda = serialized(keyValue);
         Class<?> containingClass = getContainingClass(lambda);
-        return asList(containingClass.getDeclaredMethods())
-            .stream()
-            .filter(method -> Objects.equals(method.getName(), lambda.getImplMethodName()))
+        String implMethodName = lambda.getImplMethodName();
+        return getMethod(containingClass, implMethodName);
+    }
+
+    private static Method getMethod(Class<?> containingClass, String methodName) {
+        return Arrays.stream(containingClass.getDeclaredMethods())
+            .filter(method -> Objects.equals(method.getName(), methodName))
             .findFirst()
             .orElseThrow(UnableToGuessMethodException::new);
     }
