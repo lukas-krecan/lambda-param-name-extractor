@@ -48,7 +48,7 @@ public class ParameterNameExtractor {
      * Extracts name of the last lambda parameter
      * @param lambda Serializable lambda
      */
-    public static String extractLastParameterName(Serializable lambda) {
+    public static String extractLambdaParameterName(Serializable lambda) {
         Method method = lambdaMethod(lambda);
         return getParamName(method.getParameters()[method.getParameterCount() - 1]);
     }

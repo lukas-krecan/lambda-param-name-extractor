@@ -21,10 +21,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.javacrumbs.lambdaextractor.examples.OldfashionedMapTest.Entry.entry;
+import static net.javacrumbs.lambdaextractor.examples.OldFashionedMapTest.Entry.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OldfashionedMapTest {
+public class OldFashionedMapTest {
 
     @Test
     public void testCreateUgly() {
@@ -35,8 +35,32 @@ public class OldfashionedMapTest {
         assertThat(map).containsExactly(MapEntry.entry("key1", "value1"), MapEntry.entry("key2", "value2"));
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Test
-    public void testCreateOldFashioned() {
+    public void testCreateStaticMethods() {
         Map<String, String> map = map(
             entry("key1", "value1"),
             entry("key2", "value2")
