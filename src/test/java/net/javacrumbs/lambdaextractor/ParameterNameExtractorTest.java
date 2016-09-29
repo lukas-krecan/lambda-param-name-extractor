@@ -40,6 +40,14 @@ public class ParameterNameExtractorTest {
         assertEquals("name2", ParameterNameExtractor.extractLastParameterName(lambda));
     }
 
+    @Test
+    public void shouldGetParametersOfSimpleSerializableLambdaWithCapturedAttribute() {
+        String value1 = "a";
+        String value2 = "b";
+        SerializableFunction lambda = name -> value1 + value2;
+        assertEquals("name", ParameterNameExtractor.extractLastParameterName(lambda));
+    }
+
     private interface SerializableFunction extends Function<String, String>, Serializable {
     }
 
