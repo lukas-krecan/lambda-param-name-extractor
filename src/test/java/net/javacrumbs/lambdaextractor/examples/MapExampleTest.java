@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.javacrumbs.lambdaextractor.ParameterNameExtractor.extractLambdaParameterName;
+import static net.javacrumbs.lambdaextractor.ParameterNameExtractor.extractFirstParameterName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.MapEntry.entry;
 
@@ -42,7 +42,7 @@ public class MapExampleTest {
     public static <T> Map<String, T> map(Entry<T>... entries) {
         Map<String, T> result = new HashMap<>();
         for (Entry<T> entry : entries) {
-            String name = extractLambdaParameterName(entry);
+            String name = extractFirstParameterName(entry);
             T value = entry.apply(name);
             result.put(name, value);
         }

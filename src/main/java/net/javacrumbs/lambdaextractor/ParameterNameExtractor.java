@@ -40,17 +40,21 @@ public class ParameterNameExtractor {
      * @param lambda Serializable lambda
      */
     public static List<String> extractParameterNames(Serializable lambda) {
-        Method method = lambdaMethod(lambda);
-        return Collections.unmodifiableList(Arrays.stream(method.getParameters()).map(ParameterNameExtractor::getParamName).collect(toList()));
+        SerializedLambda serializedLambda = serialized(lambda);
+        Method method = lambdaMethod(serializedLambda);
+        return Collections.unmodifiableList(Arrays
+            .stream(method.getParameters())
+            .skip(serializedLambda.getCapturedArgCount())
+            .map(ParameterNameExtractor::getParamName).collect(toList())
+        );
     }
 
     /**
-     * Extracts name of the last lambda parameter
+     * Extracts name of the first lambda parameter
      * @param lambda Serializable lambda
      */
-    public static String extractLambdaParameterName(Serializable lambda) {
-        Method method = lambdaMethod(lambda);
-        return getParamName(method.getParameters()[method.getParameterCount() - 1]);
+    public static String extractFirstParameterName(Serializable lambda) {
+        return extractParameterNames(lambda).get(0);
     }
 
     private static String getParamName(Parameter parameter) {
@@ -86,10 +90,9 @@ public class ParameterNameExtractor {
      *     <li>Finds the method in the containing class</li>
      * </ol>
      */
-    private static Method lambdaMethod(Serializable keyValue) {
-        SerializedLambda lambda = serialized(keyValue);
-        Class<?> containingClass = getContainingClass(lambda);
-        String implMethodName = lambda.getImplMethodName();
+    private static Method lambdaMethod(SerializedLambda serializedLambda) {
+        Class<?> containingClass = getContainingClass(serializedLambda);
+        String implMethodName = serializedLambda.getImplMethodName();
         return getMethod(containingClass, implMethodName);
     }
 

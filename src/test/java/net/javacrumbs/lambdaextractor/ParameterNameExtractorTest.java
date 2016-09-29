@@ -35,9 +35,10 @@ public class ParameterNameExtractorTest {
 
     @Test
     public void shouldGetParametersOfBiFunction() {
-        SerializableBiFunction lambda = (name1, name2) -> "a";
+        String value = "a";
+        SerializableBiFunction lambda = (name1, name2) -> value;
         assertEquals(asList("name1", "name2"), ParameterNameExtractor.extractParameterNames(lambda));
-        assertEquals("name2", ParameterNameExtractor.extractLambdaParameterName(lambda));
+        assertEquals("name1", ParameterNameExtractor.extractFirstParameterName(lambda));
     }
 
     @Test
@@ -45,7 +46,7 @@ public class ParameterNameExtractorTest {
         String value1 = "a";
         String value2 = "b";
         SerializableFunction lambda = name -> value1 + value2;
-        assertEquals("name", ParameterNameExtractor.extractLambdaParameterName(lambda));
+        assertEquals("name", ParameterNameExtractor.extractFirstParameterName(lambda));
     }
 
     private interface SerializableFunction extends Function<String, String>, Serializable {
