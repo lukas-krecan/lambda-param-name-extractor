@@ -38,13 +38,15 @@ public class ParameterNameExtractor {
     /**
      * Extracts names of a serializable lambda parameters
      * @param lambda Serializable lambda
+     * @param lambdaParametersCount number of lambda parameters
      */
-    public static List<String> extractParameterNames(Serializable lambda) {
+    public static List<String> extractParameterNames(Serializable lambda, int lambdaParametersCount) {
         SerializedLambda serializedLambda = serialized(lambda);
-        Method method = lambdaMethod(serializedLambda);
+
+        Method lambdaMethod = lambdaMethod(serializedLambda);
         return Collections.unmodifiableList(Arrays
-            .stream(method.getParameters())
-            .skip(serializedLambda.getCapturedArgCount())
+            .stream(lambdaMethod.getParameters())
+            .skip(lambdaMethod.getParameterCount() - lambdaParametersCount)
             .map(ParameterNameExtractor::getParamName).collect(toList())
         );
     }
@@ -52,9 +54,10 @@ public class ParameterNameExtractor {
     /**
      * Extracts name of the first lambda parameter
      * @param lambda Serializable lambda
+     * @param lambdaParametersCount number of lambda parameters
      */
-    public static String extractFirstParameterName(Serializable lambda) {
-        return extractParameterNames(lambda).get(0);
+    public static String extractFirstParameterName(Serializable lambda, int lambdaParametersCount) {
+        return extractParameterNames(lambda, lambdaParametersCount).get(0);
     }
 
     private static String getParamName(Parameter parameter) {
@@ -74,15 +77,6 @@ public class ParameterNameExtractor {
         }
     }
 
-    private static Class<?> getContainingClass(SerializedLambda serialized) {
-        try {
-            String className = serialized.getImplClass().replaceAll("/", ".");
-            return Class.forName(className);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     /**
      * <ol>
      *     <li>Serializes lambda to SerializedLambda</li>
@@ -91,16 +85,29 @@ public class ParameterNameExtractor {
      * </ol>
      */
     private static Method lambdaMethod(SerializedLambda serializedLambda) {
-        Class<?> containingClass = getContainingClass(serializedLambda);
+        Class<?> containingClass = getClassForName(serializedLambda.getImplClass());
         String implMethodName = serializedLambda.getImplMethodName();
         return getMethod(containingClass, implMethodName);
     }
 
-    private static Method getMethod(Class<?> containingClass, String methodName) {
-        return Arrays.stream(containingClass.getDeclaredMethods())
-            .filter(method -> Objects.equals(method.getName(), methodName))
+    private static Class<?> getClassForName(String className) {
+        try {
+            String normalizedClassName = className.replaceAll("/", ".");
+            return Class.forName(normalizedClassName);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private static Method getMethod(Class<?> clazz, String methodName) {
+        return Arrays.stream(clazz.getDeclaredMethods())
+            .filter(method -> isSameMethod(methodName, method))
             .findFirst()
             .orElseThrow(UnableToGuessMethodException::new);
+    }
+
+    private static boolean isSameMethod(String methodName, Method method) {
+        return Objects.equals(method.getName(), methodName);
     }
 
     static class UnableToGuessMethodException extends IllegalStateException {

@@ -42,7 +42,7 @@ public class MapExampleTest {
     public static <T> Map<String, T> map(Entry<T>... entries) {
         Map<String, T> result = new HashMap<>();
         for (Entry<T> entry : entries) {
-            String name = extractFirstParameterName(entry);
+            String name = extractFirstParameterName(entry, 1);
             T value = entry.apply(name);
             result.put(name, value);
         }

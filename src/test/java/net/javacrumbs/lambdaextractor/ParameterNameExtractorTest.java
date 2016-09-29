@@ -18,6 +18,8 @@ package net.javacrumbs.lambdaextractor;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -30,15 +32,15 @@ public class ParameterNameExtractorTest {
     @Test
     public void shouldGetParametersOfSimpleSerializableLambda() {
         SerializableFunction lambda = name -> "a";
-        assertEquals(singletonList("name"), ParameterNameExtractor.extractParameterNames(lambda));
+        assertEquals(singletonList("name"), ParameterNameExtractor.extractParameterNames(lambda, 1));
     }
 
     @Test
     public void shouldGetParametersOfBiFunction() {
         String value = "a";
         SerializableBiFunction lambda = (name1, name2) -> value;
-        assertEquals(asList("name1", "name2"), ParameterNameExtractor.extractParameterNames(lambda));
-        assertEquals("name1", ParameterNameExtractor.extractFirstParameterName(lambda));
+        assertEquals(asList("name1", "name2"), ParameterNameExtractor.extractParameterNames(lambda, 2));
+        assertEquals("name1", ParameterNameExtractor.extractFirstParameterName(lambda, 2));
     }
 
     @Test
@@ -46,7 +48,13 @@ public class ParameterNameExtractorTest {
         String value1 = "a";
         String value2 = "b";
         SerializableFunction lambda = name -> value1 + value2;
-        assertEquals("name", ParameterNameExtractor.extractFirstParameterName(lambda));
+        assertEquals("name", ParameterNameExtractor.extractFirstParameterName(lambda, 1));
+    }
+
+    @Test
+    public void shouldGetParametersOfFunctionCall() {
+        SerializableListFunction lambda = name -> singletonList("value1");
+        assertEquals("name", ParameterNameExtractor.extractFirstParameterName(lambda, 1));
     }
 
     private interface SerializableFunction extends Function<String, String>, Serializable {
@@ -54,5 +62,9 @@ public class ParameterNameExtractorTest {
 
     private interface SerializableBiFunction extends BiFunction<String, Integer, String>, Serializable {
     }
+
+    private interface SerializableListFunction extends Function<String, List<String>>, Serializable {
+    }
+
 
 }
