@@ -21,22 +21,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.javacrumbs.lambdaextractor.ParameterNameExtractor.extractFirstParameterName;
+import static net.javacrumbs.lambdaextractor.ParameterNameExtractor.extractLastParameterName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.MapEntry.entry;
 
 public class MapExampleTest {
     @Test
-    public void testCreateMap() {
-        Map<String, String> map = map(
-            key1 -> "value1",
-            key2 -> "value2"
-        );
-        assertThat(map).containsExactly(entry("key1", "value1"), entry("key2", "value2"));
-    }
-
-    @Test
-    public void testCreateMapExtenalValue() {
+    public void testCreateMapExternalValue() {
         String value2 = "value2";
 
         Map<String, String> map = map(
@@ -49,8 +40,8 @@ public class MapExampleTest {
     @SafeVarargs
     public static <T> Map<String, T> map(Entry<T>... entries) {
         Map<String, T> result = new HashMap<>();
-        for (Entry<T> entry: entries) {
-            String name = extractFirstParameterName(entry);
+        for (Entry<T> entry : entries) {
+            String name = extractLastParameterName(entry);
             T value = entry.apply(name);
             result.put(name, value);
         }

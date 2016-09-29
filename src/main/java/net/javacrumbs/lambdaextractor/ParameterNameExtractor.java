@@ -45,13 +45,13 @@ public class ParameterNameExtractor {
     }
 
     /**
-       * Extracts names of a serializable lambda parameters
-       * @param lambda Serializable lambda
-       */
-      public static String extractFirstParameterName(Serializable lambda) {
-          Method method = lambdaMethod(lambda);
-          return getParamName(method.getParameters()[0]);
-      }
+     * Extracts name of the last lambda parameter
+     * @param lambda Serializable lambda
+     */
+    public static String extractLastParameterName(Serializable lambda) {
+        Method method = lambdaMethod(lambda);
+        return getParamName(method.getParameters()[method.getParameterCount() - 1]);
+    }
 
     private static String getParamName(Parameter parameter) {
         if (!parameter.isNamePresent()) {
