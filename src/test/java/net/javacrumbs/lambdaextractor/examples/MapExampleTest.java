@@ -28,14 +28,18 @@ import static org.assertj.core.data.MapEntry.entry;
 public class MapExampleTest {
     @Test
     public void testCreateMapExternalValue() {
-        String value2 = "value2";
+        String value = "value";
 
         Map<String, String> map = map(
             key1 -> "value1",
-            key2 -> value2
+            key2 -> value + "2"
         );
+
         System.out.println(map);
-        assertThat(map).containsExactly(entry("key1", "value1"), entry("key2", "value2"));
+        assertThat(map).containsExactly(
+            entry("key1", "value1"),
+            entry("key2", "value2")
+        );
     }
 
     @SafeVarargs
@@ -50,7 +54,7 @@ public class MapExampleTest {
     }
 
     @FunctionalInterface
-    public static interface Entry<T> extends Serializable {
-        public T apply(String name);
+    public interface Entry<T> extends Serializable {
+        T apply(String name);
     }
 }

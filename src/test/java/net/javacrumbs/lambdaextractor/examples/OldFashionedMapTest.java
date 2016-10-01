@@ -32,7 +32,10 @@ public class OldFashionedMapTest {
             put("key1", "value1");
             put("key2", "value2");
         }};
-        assertThat(map).containsExactly(MapEntry.entry("key1", "value1"), MapEntry.entry("key2", "value2"));
+        assertThat(map).containsExactly(
+            MapEntry.entry("key1", "value1"),
+            MapEntry.entry("key2", "value2")
+        );
     }
 
 
@@ -65,7 +68,11 @@ public class OldFashionedMapTest {
             entry("key1", "value1"),
             entry("key2", "value2")
         );
-        assertThat(map).containsExactly(MapEntry.entry("key1", "value1"), MapEntry.entry("key2", "value2"));
+
+        assertThat(map).containsExactly(
+            MapEntry.entry("key1", "value1"),
+            MapEntry.entry("key2", "value2")
+        );
     }
 
     @SafeVarargs
