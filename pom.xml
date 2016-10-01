@@ -17,7 +17,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>4.3.0.RELEASE</version>
-            <scope>optional</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
