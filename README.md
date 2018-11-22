@@ -1,3 +1,5 @@
+**This was an experiment, which unfortunatelly does not work in Java 9 and higher!!!**
+
 # Extracts parameter names from Java 8 lambdas
 
 Extracts parameter name from lambda. Inspired by Benji Weber's [code](https://github.com/benjiman/lambda-type-references/blob/master/src/main/java/com/benjiweber/typeref/MethodFinder.java)
